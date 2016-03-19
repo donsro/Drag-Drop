@@ -143,7 +143,7 @@
 	this.onkeydown = function(ev) {
 		var key = ev.which;
 		shiftDown = ev.shiftKey;
-		if( shiftDown && key === 75 ) {
+		if( shiftDown && key === 75 ) { // Shift + K 
 			dndDiv.classList.remove('bg-yellow');
 			dndTarget.classList.remove('dnd-over');
 		}
