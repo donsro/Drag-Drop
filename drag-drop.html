@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
+	<title>Hello World</title>
+	<meta name="description" content="HTML5 Drag and drop">
+	<meta name="author" content="Don Sro">
+	<style type="text/css">
+
+		.content {
+			float: left;
+			width: 30em;
+		}
+
+		.dnd-box {
+			cursor: move;
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			width: 150px;
+			height: 150px;
+		}
+
+		.dnd-target {
+			position: absolute;
+			top: 20px;
+			right: 200px;
+			width: 300px;
+			height: 300px;
+			border: 1px solid black;
+			background-color: white;
+		}
+
+		.bg-blue {
+			background-color: blue;
+		}
+
+		.bg-yellow {
+			background-color: yellow;
+		}
+
+		.bg-red {
+			background-color: red;
+		}
+
+		.bg-green {
+			background-color: green;
+		}
+
+		.dnd-over {
+			border: 1px dashed red;
+		}
+		.centered {
+			/* Internet Explorer 10 */
+			display:-ms-flexbox;
+			-ms-flex-pack:center;
+			-ms-flex-align:center;
+
+			/* Firefox */
+			display:-moz-box;
+			-moz-box-pack:center;
+			-moz-box-align:center;
+
+			/* Safari, Opera, and Chrome */
+			display:-webkit-box;
+			-webkit-box-pack:center;
+			-webkit-box-align:center;
+
+			/* W3C */
+			display:box;
+			box-pack:center;
+			box-align:center;
+
+			text-align: center;
+		}
+
+	</style>
+	</head>
+	<body>
+
+		<section class="content">
+			<h1>Drag &amp; Drop</h1>
+			<p>Reset: <code>Shift + K</code></p>
+			<p>Test assignment <a href="https://gist.github.com/mundizzle/be778347b5e093d13ccf" target="_blank">requirements</a></p>
+
+			<h3>Task 1</h3>
+
+			<p>Create 300px x 300px box with a white background and 1px border. Create a second smaller box 150px x 150px with a blue background. Position the two boxes absolutely so that they are separated from each other.</p>
+
+			<p>When the user drags the smaller box, the box background should turn red. While dragging the box if you hover over the bigger box the background of the smaller box should turn green. If you drop the smaller box inside of the bigger box, the background color of the small box should turn yellow.</p>
+
+			<h3>Task 2</h3>
+
+			<p>Give the user the ability to reset the squares to the original state by holding down the shift key and hitting the k key. In other words the user should be able to press <em>Shift + K</em> and reset the page back to the original state.</p>
+		</section>
+
+		<div class="dnd-box centered bg-blue" draggable="true">Drag<br>&amp;<br>Drop</div>
+		<div class="dnd-target centered">Target</div>
+
+	<script>
+
+	var dragSrcEl = null,
+		shiftDown = false,
+		dndDiv = document.querySelector('.dnd-box'),
+		dndTarget = document.querySelector('.dnd-target');
+
+	function dragStart(e) {
+		e.target.classList.add('bg-red'); // this === e.target
+		dndDiv.classList.remove('bg-yellow');
+	}
+
+	function dragEnd(e) {
+		e.target.classList.remove('bg-red');
+	}
+
+	function dragEnter(e) {
+		dndDiv.classList.add('bg-green');
+		e.target.classList.add('dnd-over');
+	}
+
+	function dragLeave(e) {
+		dndDiv.classList.remove('bg-green');
+		e.target.classList.remove('dnd-over');
+	}
+
+	function dragOver(e) {
+		e.preventDefault(); // Necessary. Allows us to drop.
+		e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+	}
+
+	function drop(e) {
+		dndDiv.classList.remove('bg-green');
+		dndDiv.classList.add('bg-yellow');
+	}
+
+	dndDiv.addEventListener('dragstart', dragStart, false);
+	dndDiv.addEventListener('dragend', dragEnd, false);
+	dndTarget.addEventListener('drop', drop, false);
+	dndTarget.addEventListener('dragover', dragOver, false);
+	dndTarget.addEventListener('dragenter', dragEnter, false);
+	dndTarget.addEventListener('dragleave', dragLeave, false);
+
+	this.onkeydown = function(ev) {
+		var key = ev.which;
+		shiftDown = ev.shiftKey;
+		if( shiftDown && key === 75 ) {
+			dndDiv.classList.remove('bg-yellow');
+			dndTarget.classList.remove('dnd-over');
+		}
+	};
+	this.onkeyup = function() { shiftDown = false; };
+
+	</script>
+	</body>
+</html>
