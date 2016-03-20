@@ -79,7 +79,7 @@
 	<body>
 
 		<section class="content">
-			<h1>Drag &amp; Drop</h1>
+			<h1 draggable="true">Drag &amp; Drop</h1>
 			<p>Reset: <code>Shift + K</code></p>
 			<p>Test assignment <a href="https://gist.github.com/mundizzle/be778347b5e093d13ccf" target="_blank">requirements</a></p>
 
@@ -107,18 +107,22 @@
 	function dragStart(e) {
 		e.target.classList.add('bg-red'); // this === e.target
 		dndDiv.classList.remove('bg-yellow');
+		e.dataTransfer.setData('text', 'Hi there'); // some browsers (ex. Firefox) require this.
 	}
 
 	function dragEnd(e) {
+		e.preventDefault(); // preventing browser's redirect
 		e.target.classList.remove('bg-red');
 	}
 
 	function dragEnter(e) {
+		e.preventDefault(); // preventing browser's redirect
 		dndDiv.classList.add('bg-green');
 		e.target.classList.add('dnd-over');
 	}
 
 	function dragLeave(e) {
+		e.preventDefault(); // preventing browser's redirect
 		dndDiv.classList.remove('bg-green');
 		e.target.classList.remove('dnd-over');
 	}
@@ -129,11 +133,12 @@
 	}
 
 	function drop(e) {
+		e.preventDefault(); // preventing browser's redirect
 		dndDiv.classList.remove('bg-green');
 		dndDiv.classList.add('bg-yellow');
 	}
 
-	dndDiv.addEventListener('dragstart', dragStart, false);
+	dndDiv.addEventListener('dragstart', dragStart, true);
 	dndDiv.addEventListener('dragend', dragEnd, false);
 	dndTarget.addEventListener('drop', drop, false);
 	dndTarget.addEventListener('dragover', dragOver, false);
@@ -143,7 +148,7 @@
 	this.onkeydown = function(ev) {
 		var key = ev.which;
 		shiftDown = ev.shiftKey;
-		if( shiftDown && key === 75 ) { // Shift + K 
+		if( shiftDown && key === 75 ) {
 			dndDiv.classList.remove('bg-yellow');
 			dndTarget.classList.remove('dnd-over');
 		}
